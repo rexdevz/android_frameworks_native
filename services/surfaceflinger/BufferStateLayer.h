@@ -35,8 +35,6 @@ class BufferStateLayer : public BufferLayer {
 public:
     explicit BufferStateLayer(const LayerCreationArgs&);
 
-    ~BufferStateLayer() override;
-
     // -----------------------------------------------------------------------
     // Interface implementation for Layer
     // -----------------------------------------------------------------------

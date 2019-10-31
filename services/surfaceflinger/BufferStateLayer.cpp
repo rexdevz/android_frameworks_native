@@ -51,16 +51,6 @@ BufferStateLayer::BufferStateLayer(const LayerCreationArgs& args)
     mCurrentState.dataspace = ui::Dataspace::V0_SRGB;
 }
 
-BufferStateLayer::~BufferStateLayer() {
-    if (mActiveBuffer != nullptr) {
-        // Ensure that mActiveBuffer is uncached from RenderEngine here, as
-        // RenderEngine may have been using the buffer as an external texture
-        // after the client uncached the buffer.
-        auto& engine(mFlinger->getRenderEngine());
-        engine.unbindExternalTextureBuffer(mActiveBuffer->getId());
-    }
-}
-
 // -----------------------------------------------------------------------
 // Interface implementation for Layer
 // -----------------------------------------------------------------------

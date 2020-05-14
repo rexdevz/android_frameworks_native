@@ -617,9 +617,11 @@ void BufferQueueLayer::onFirstRef() {
         updateTransformHint(display);
     }
 
+#ifdef QCOM_UM_FAMILY
     if (mFlinger->mLayerExt) {
         mLayerType = mFlinger->mLayerExt->getLayerClass(mName.string());
     }
+#endif
 }
 
 status_t BufferQueueLayer::setDefaultBufferProperties(uint32_t w, uint32_t h, PixelFormat format) {

@@ -134,9 +134,8 @@
 #include "frame_extn_intf.h"
 #include "smomo_interface.h"
 #include "layer_extn_intf.h"
-#endif
-
 composer::ComposerExtnLib composer::ComposerExtnLib::g_composer_ext_lib_;
+#endif
 
 namespace android {
 
@@ -292,6 +291,7 @@ std::string decodeDisplayColorSetting(DisplayColorSetting displayColorSetting) {
 
 SurfaceFlingerBE::SurfaceFlingerBE() : mHwcServiceName(getHwcServiceName()) {}
 
+#ifdef QCOM_UM_FAMILY
 bool LayerExtWrapper::Init() {
     mLayerExtLibHandle = dlopen(LAYER_EXTN_LIBRARY_NAME, RTLD_NOW);
     if (!mLayerExtLibHandle) {
@@ -333,8 +333,10 @@ std::unique_ptr<LayerExtWrapper> LayerExtWrapper::Create() {
 int LayerExtWrapper::getLayerClass(const std::string &name) {
   return mInst->GetLayerClass(name);
 }
+#endif
 
 LayerExtWrapper::~LayerExtWrapper() {
+#ifdef QCOM_UM_FAMILY
     if (mInst) {
         mLayerExtDestroyFunc(mInst);
     }
@@ -342,6 +344,7 @@ LayerExtWrapper::~LayerExtWrapper() {
     if (mLayerExtLibHandle) {
       dlclose(mLayerExtLibHandle);
     }
+#endif
 }
 
 SurfaceFlinger::SurfaceFlinger(Factory& factory, SkipInitializationTag)
@@ -528,8 +531,11 @@ SurfaceFlinger::SurfaceFlinger(Factory& factory) : SurfaceFlinger(factory, SkipI
         }
         if (!mDolphinFuncsEnabled) dlclose(mDolphinHandle);
     }
+#else
+    mDolphinHandle = nullptr;
+#endif
 
-
+#ifdef QCOM_UM_FAMILY
     mFrameExtnLibHandle = dlopen(EXTENSION_LIBRARY_NAME, RTLD_NOW);
     if (!mFrameExtnLibHandle) {
         ALOGE("Unable to open libframeextension.so: %s.", dlerror());
@@ -1877,6 +1883,7 @@ void SurfaceFlinger::onRefreshReceived(int sequenceId, hwc2_display_t /*hwcDispl
 }
 
 void SurfaceFlinger::updateFrameScheduler() NO_THREAD_SAFETY_ANALYSIS {
+#ifdef QCOM_UM_FAMILY
     if (!mFrameSchedulerExtnIntf) {
         return;
     }
@@ -1907,6 +1914,9 @@ void SurfaceFlinger::updateFrameScheduler() NO_THREAD_SAFETY_ANALYSIS {
             mVsyncModulator.onRefreshRateChangeCompleted();
         }
     }
+#else
+    return;
+#endif
 }
 
 void SurfaceFlinger::setVsyncEnabled(bool enabled) {

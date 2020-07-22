@@ -439,6 +439,13 @@ int BufferStateLayer::getDrawingApi() const {
     return getDrawingState().api;
 }
 
+PixelFormat BufferStateLayer::getPixelFormat() const {
+    if (!mActiveBuffer) {
+        return PIXEL_FORMAT_NONE;
+    }
+    return mActiveBuffer->format;
+}
+
 uint64_t BufferStateLayer::getFrameNumber() const {
     return mFrameNumber;
 }

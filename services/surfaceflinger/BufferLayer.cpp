@@ -252,14 +252,7 @@ bool BufferLayer::isHdrY410() const {
     // pixel format is HDR Y410 masquerading as RGBA_1010102
     return (mCurrentDataSpace == ui::Dataspace::BT2020_ITU_PQ &&
             getDrawingApi() == NATIVE_WINDOW_API_MEDIA &&
-            getPixelFormat() == HAL_PIXEL_FORMAT_RGBA_1010102);
-}
-
-PixelFormat BufferLayer::getPixelFormat() const {
-    if (!mActiveBuffer) {
-        return PIXEL_FORMAT_NONE;
-    }
-    return mActiveBuffer->format;
+            mActiveBuffer->getPixelFormat() == HAL_PIXEL_FORMAT_RGBA_1010102);
 }
 
 void BufferLayer::setPerFrameData(const sp<const DisplayDevice>& displayDevice,

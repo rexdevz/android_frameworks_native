@@ -37,7 +37,6 @@ BlurFilter::BlurFilter(GLESRenderEngine& engine)
         mPongFbo(engine),
         mMixProgram(engine),
         mBlurProgram(engine) {
-    ALOGI("PRODUCT_SHIPPING_API_LEVEL=%d", PRODUCT_SHIPPING_API_LEVEL);
     mMixProgram.compile(getVertexShader(), getMixFragShader());
     mMPosLoc = mMixProgram.getAttributeLocation("aPosition");
     mMUvLoc = mMixProgram.getAttributeLocation("aUV");
